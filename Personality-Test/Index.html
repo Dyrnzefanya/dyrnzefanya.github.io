@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personality Test - Temukan Kepribadianmu</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+
+        const Sparkles = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+        );
+
+        const ArrowRight = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+        );
+
+        const RotateCcw = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+            </svg>
+        );
+
+        const Heart = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+        );
+
+        const Brain = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+        );
+
+        const Zap = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+        );
+
+        const Users = ({ className }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+        );
+
+        function PersonalityTest() {
+            const [currentQuestion, setCurrentQuestion] = useState(0);
+            const [answers, setAnswers] = useState({});
+            const [showResult, setShowResult] = useState(false);
+            const [started, setStarted] = useState(false);
+
+            const questions = [
+                {
+                    id: 1,
+                    question: "Ketika bertemu orang baru, kamu biasanya...",
+                    options: [
+                        { text: "Langsung mengajak ngobrol dengan antusias", type: "E", points: 3 },
+                        { text: "Menunggu mereka mengajak bicara dulu", type: "I", points: 3 },
+                        { text: "Sapa sekilas lalu observasi dulu", type: "I", points: 2 },
+                        { text: "Bersikap ramah tapi tidak terlalu banyak bicara", type: "E", points: 1 }
+                    ]
+                },
+                {
+                    id: 2,
+                    question: "Saat menghadapi masalah, kamu cenderung...",
+                    options: [
+                        { text: "Mencari solusi praktis yang bisa langsung diterapkan", type: "S", points: 3 },
+                        { text: "Memikirkan berbagai kemungkinan dan makna di baliknya", type: "N", points: 3 },
+                        { text: "Fokus pada fakta dan data yang ada", type: "S", points: 2 },
+                        { text: "Membayangkan skenario-skenario alternatif", type: "N", points: 2 }
+                    ]
+                },
+                {
+                    id: 3,
+                    question: "Dalam mengambil keputusan penting, kamu lebih...",
+                    options: [
+                        { text: "Menggunakan logika dan analisis objektif", type: "T", points: 3 },
+                        { text: "Mempertimbangkan perasaan orang yang terlibat", type: "F", points: 3 },
+                        { text: "Melihat pro-kontra secara rasional", type: "T", points: 2 },
+                        { text: "Mengikuti kata hati dan nilai personal", type: "F", points: 2 }
+                    ]
+                },
+                {
+                    id: 4,
+                    question: "Gaya hidup sehari-hari kamu lebih...",
+                    options: [
+                        { text: "Terencana dan terorganisir dengan baik", type: "J", points: 3 },
+                        { text: "Fleksibel dan spontan sesuai mood", type: "P", points: 3 },
+                        { text: "Ada jadwal tapi bisa beradaptasi", type: "J", points: 1 },
+                        { text: "Santai dan mengalir apa adanya", type: "P", points: 2 }
+                    ]
+                },
+                {
+                    id: 5,
+                    question: "Di acara sosial/pesta, kamu merasa energi kamu...",
+                    options: [
+                        { text: "Meningkat! Semakin lama semakin semangat", type: "E", points: 3 },
+                        { text: "Terkuras, perlu waktu sendiri setelahnya", type: "I", points: 3 },
+                        { text: "Biasa saja, tergantung siapa yang hadir", type: "E", points: 1 },
+                        { text: "Enjoy di awal, tapi cepat lelah", type: "I", points: 2 }
+                    ]
+                },
+                {
+                    id: 6,
+                    question: "Saat belajar hal baru, kamu lebih suka...",
+                    options: [
+                        { text: "Praktik langsung dan belajar dari pengalaman", type: "S", points: 3 },
+                        { text: "Memahami konsep dan teori di baliknya dulu", type: "N", points: 3 },
+                        { text: "Ikuti instruksi step-by-step", type: "S", points: 2 },
+                        { text: "Eksplorasi sendiri dan cari pola", type: "N", points: 2 }
+                    ]
+                },
+                {
+                    id: 7,
+                    question: "Dalam diskusi/debat, kamu cenderung...",
+                    options: [
+                        { text: "Fokus pada argumen logis dan fakta", type: "T", points: 3 },
+                        { text: "Mempertimbangkan dampak emosional", type: "F", points: 3 },
+                        { text: "Mencari kebenaran objektif", type: "T", points: 2 },
+                        { text: "Berusaha menjaga harmoni", type: "F", points: 2 }
+                    ]
+                },
+                {
+                    id: 8,
+                    question: "Cara kerja kamu biasanya...",
+                    options: [
+                        { text: "Buat to-do list dan selesaikan satu per satu", type: "J", points: 3 },
+                        { text: "Mulai dari yang paling menarik perhatian", type: "P", points: 3 },
+                        { text: "Deadline-driven, selesai tepat waktu", type: "J", points: 2 },
+                        { text: "Kerja paling produktif saat last minute", type: "P", points: 2 }
+                    ]
+                }
+            ];
+
+            const personalities = {
+                INTJ: {
+                    name: "The Mastermind",
+                    icon: Brain,
+                    color: "from-purple-600 to-indigo-600",
+                    description: "Pemikir strategis yang visioner dan independen.",
+                    traits: [
+                        "Analitis dan logical",
+                        "Visioner dengan rencana jangka panjang",
+                        "Mandiri dan percaya diri",
+                        "Perfeksionis dalam pekerjaan"
+                    ],
+                    strength: "Kemampuan strategic thinking dan problem-solving yang excellent",
+                    weakness: "Kadang terlalu kritis dan kurang peka terhadap perasaan orang lain"
+                },
+                INTP: {
+                    name: "The Thinker",
+                    icon: Brain,
+                    color: "from-blue-600 to-cyan-600",
+                    description: "Pemikir filosofis yang kreatif dan inovatif.",
+                    traits: [
+                        "Sangat curious dan ingin tahu",
+                        "Logical dan objektif",
+                        "Creative problem solver",
+                        "Suka teori dan konsep abstrak"
+                    ],
+                    strength: "Kemampuan analytical thinking dan inovasi yang luar biasa",
+                    weakness: "Terkadang terlalu teoritis dan susah fokus pada hal praktis"
+                },
+                ENTJ: {
+                    name: "The Commander",
+                    icon: Zap,
+                    color: "from-red-600 to-orange-600",
+                    description: "Pemimpin alami yang tegas dan efisien.",
+                    traits: [
+                        "Natural leader yang karismatik",
+                        "Tegas dan decisive",
+                        "Ambisius dan goal-oriented",
+                        "Excellent dalam organisasi"
+                    ],
+                    strength: "Leadership dan strategic planning yang kuat",
+                    weakness: "Bisa terlihat dominan dan kurang sabar dengan inefficiency"
+                },
+                ENTP: {
+                    name: "The Debater",
+                    icon: Sparkles,
+                    color: "from-orange-600 to-yellow-600",
+                    description: "Inovator kreatif yang suka tantangan intelektual.",
+                    traits: [
+                        "Quick-witted dan cerdas",
+                        "Suka berdebat dan brainstorming",
+                        "Adaptable dan resourceful",
+                        "Energik dan antusias"
+                    ],
+                    strength: "Kreativitas dan kemampuan berpikir out-of-the-box",
+                    weakness: "Mudah bosan dan kadang kurang follow-through"
+                },
+                INFJ: {
+                    name: "The Advocate",
+                    icon: Heart,
+                    color: "from-green-600 to-teal-600",
+                    description: "Idealis dengan visi untuk membuat dunia lebih baik.",
+                    traits: [
+                        "Empatik dan pengertian",
+                        "Idealis dengan nilai kuat",
+                        "Kreatif dan inspiratif",
+                        "Insightful terhadap orang lain"
+                    ],
+                    strength: "Deep empathy dan kemampuan memahami orang lain",
+                    weakness: "Terlalu perfeksionis dan sensitif terhadap kritik"
+                },
+                INFP: {
+                    name: "The Mediator",
+                    icon: Heart,
+                    color: "from-pink-600 to-rose-600",
+                    description: "Idealis kreatif yang dipandu oleh nilai-nilai pribadi.",
+                    traits: [
+                        "Sangat kreatif dan imaginatif",
+                        "Empatik dan caring",
+                        "Idealis dengan nilai kuat",
+                        "Open-minded dan fleksibel"
+                    ],
+                    strength: "Kreativitas dan empati yang mendalam",
+                    weakness: "Terlalu idealis dan mudah overwhelmed"
+                },
+                ENFJ: {
+                    name: "The Protagonist",
+                    icon: Users,
+                    color: "from-emerald-600 to-green-600",
+                    description: "Pemimpin karismatik yang inspiring dan peduli.",
+                    traits: [
+                        "Charismatic dan inspiring",
+                        "Excellent communicator",
+                        "Peduli dengan orang lain",
+                        "Natural mentor dan teacher"
+                    ],
+                    strength: "Leadership dan kemampuan memotivasi orang lain",
+                    weakness: "Terlalu fokus pada orang lain, lupa diri sendiri"
+                },
+                ENFP: {
+                    name: "The Campaigner",
+                    icon: Sparkles,
+                    color: "from-yellow-600 to-amber-600",
+                    description: "Enthusiast kreatif yang penuh energi dan ide.",
+                    traits: [
+                        "Enthusiastic dan energik",
+                        "Sangat kreatif",
+                        "Excellent people skills",
+                        "Spontan dan fun"
+                    ],
+                    strength: "Kreativitas dan kemampuan connect dengan orang",
+                    weakness: "Mudah distracted dan overthinking"
+                },
+                ISTJ: {
+                    name: "The Logistician",
+                    icon: Brain,
+                    color: "from-slate-600 to-gray-600",
+                    description: "Praktis, faktual, dan sangat dapat diandalkan.",
+                    traits: [
+                        "Responsible dan reliable",
+                        "Organized dan detail-oriented",
+                        "Practical dan realistic",
+                        "Loyal dan dedicated"
+                    ],
+                    strength: "Reliability dan attention to detail",
+                    weakness: "Kadang terlalu rigid dan resisten terhadap perubahan"
+                },
+                ISFJ: {
+                    name: "The Defender",
+                    icon: Heart,
+                    color: "from-blue-500 to-indigo-500",
+                    description: "Pelindung yang hangat, peduli, dan dedicated.",
+                    traits: [
+                        "Caring dan supportive",
+                        "Detail-oriented",
+                        "Responsible dan hardworking",
+                        "Loyal dan traditional"
+                    ],
+                    strength: "Dedikasi dan perhatian terhadap kebutuhan orang lain",
+                    weakness: "Terlalu humble dan reluctant untuk berubah"
+                },
+                ESTJ: {
+                    name: "The Executive",
+                    icon: Zap,
+                    color: "from-blue-700 to-blue-900",
+                    description: "Administrator yang efisien dan organized.",
+                    traits: [
+                        "Organized dan efficient",
+                        "Direct dan honest",
+                        "Strong work ethic",
+                        "Good at managing"
+                    ],
+                    strength: "Organizational skills dan leadership",
+                    weakness: "Bisa terlihat bossy dan inflexible"
+                },
+                ESFJ: {
+                    name: "The Consul",
+                    icon: Users,
+                    color: "from-teal-600 to-cyan-600",
+                    description: "Orang yang caring, social, dan popular.",
+                    traits: [
+                        "Warm dan caring",
+                        "Social butterfly",
+                        "Organized dan dutiful",
+                        "Eager to help"
+                    ],
+                    strength: "Social skills dan kemampuan menciptakan harmoni",
+                    weakness: "Terlalu khawatir tentang pendapat orang lain"
+                },
+                ISTP: {
+                    name: "The Virtuoso",
+                    icon: Zap,
+                    color: "from-gray-700 to-slate-700",
+                    description: "Praktis dan hands-on problem solver.",
+                    traits: [
+                        "Practical dan hands-on",
+                        "Logical dan analytical",
+                        "Spontaneous dan adaptable",
+                        "Good in crisis"
+                    ],
+                    strength: "Problem-solving praktis dan kemampuan teknis",
+                    weakness: "Susah mengekspresikan emosi dan commitmen"
+                },
+                ISFP: {
+                    name: "The Adventurer",
+                    icon: Heart,
+                    color: "from-purple-500 to-pink-500",
+                    description: "Artist yang fleksibel dan charming.",
+                    traits: [
+                        "Artistic dan creative",
+                        "Sensitive dan kind",
+                        "Spontaneous dan flexible",
+                        "Live in the moment"
+                    ],
+                    strength: "Kreativitas dan appreciation untuk keindahan",
+                    weakness: "Terlalu sensitive dan unpredictable"
+                },
+                ESTP: {
+                    name: "The Entrepreneur",
+                    icon: Zap,
+                    color: "from-red-700 to-orange-700",
+                    description: "Energetic dan action-oriented risk taker.",
+                    traits: [
+                        "Energetic dan action-oriented",
+                        "Bold dan pragmatic",
+                        "Social dan fun-loving",
+                        "Good at improvising"
+                    ],
+                    strength: "Adaptability dan kemampuan take action cepat",
+                    weakness: "Impulsive dan risk-taking yang berlebihan"
+                },
+                ESFP: {
+                    name: "The Entertainer",
+                    icon: Sparkles,
+                    color: "from-pink-500 to-rose-500",
+                    description: "Spontan, energetic, dan enthusiastic entertainer.",
+                    traits: [
+                        "Outgoing dan fun",
+                        "Spontaneous dan enthusiastic",
+                        "Excellent people skills",
+                        "Live for the moment"
+                    ],
+                    strength: "Social skills dan kemampuan membuat orang happy",
+                    weakness: "Mudah bored dan kesulitan planning jangka panjang"
+                }
+            };
+
+            const handleAnswer = (optionIndex) => {
+                const option = questions[currentQuestion].options[optionIndex];
+                
+                setAnswers(prev => ({
+                    ...prev,
+                    [currentQuestion]: option
+                }));
+
+                if (currentQuestion < questions.length - 1) {
+                    setTimeout(() => {
+                        setCurrentQuestion(currentQuestion + 1);
+                    }, 300);
+                } else {
+                    setTimeout(() => {
+                        setShowResult(true);
+                    }, 300);
+                }
+            };
+
+            const calculateResult = () => {
+                const scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+                
+                Object.values(answers).forEach(answer => {
+                    scores[answer.type] += answer.points;
+                });
+
+                const personality = 
+                    (scores.E >= scores.I ? 'E' : 'I') +
+                    (scores.N >= scores.S ? 'N' : 'S') +
+                    (scores.T >= scores.F ? 'T' : 'F') +
+                    (scores.J >= scores.P ? 'J' : 'P');
+
+                return personalities[personality] || personalities.INFP;
+            };
+
+            const restart = () => {
+                setCurrentQuestion(0);
+                setAnswers({});
+                setShowResult(false);
+                setStarted(false);
+            };
+
+            if (!started) {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center p-4">
+                        <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center">
+                            <div className="mb-6 flex justify-center">
+                                <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 rounded-full">
+                                    <Sparkles className="w-12 h-12 text-white" />
+                                </div>
+                            </div>
+                            <h1 className="text-3xl font-bold text-gray-800 mb-3">
+                                Personality Test
+                            </h1>
+                            <p className="text-gray-600 mb-8">
+                                Temukan tipe kepribadian kamu berdasarkan MBTI! 
+                                Test ini terdiri dari {questions.length} pertanyaan singkat.
+                            </p>
+                            <button
+                                onClick={() => setStarted(true)}
+                                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-xl font-semibold text-lg hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center gap-2"
+                            >
+                                Mulai Test
+                                <ArrowRight className="w-5 h-5" />
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (showResult) {
+                const result = calculateResult();
+                const Icon = result.icon;
+                
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center p-4">
+                        <div className="max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-8">
+                            <div className="text-center mb-6">
+                                <div className={`inline-flex justify-center items-center bg-gradient-to-r ${result.color} p-4 rounded-full mb-4 text-white`}>
+                                    <Icon className="w-16 h-16" />
+                                </div>
+                                <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                                    {result.name}
+                                </h2>
+                                <p className="text-xl text-gray-600 mb-4">
+                                    {result.description}
+                                </p>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="bg-gray-50 rounded-2xl p-6">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-3">✨ Karakteristik Utama:</h3>
+                                    <ul className="space-y-2">
+                                        {result.traits.map((trait, index) => (
+                                            <li key={index} className="flex items-start gap-2 text-gray-700">
+                                                <span className="text-purple-600 mt-1">•</span>
+                                                <span>{trait}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                <div className="bg-green-50 rounded-2xl p-6">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-2">💪 Kekuatan:</h3>
+                                    <p className="text-gray-700">{result.strength}</p>
+                                </div>
+
+                                <div className="bg-orange-50 rounded-2xl p-6">
+                                    <h3 className="font-bold text-lg text-gray-800 mb-2">🎯 Area Pengembangan:</h3>
+                                    <p className="text-gray-700">{result.weakness}</p>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={restart}
+                                className="w-full mt-8 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center gap-2"
+                            >
+                                <RotateCcw className="w-5 h-5" />
+                                Test Ulang
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center p-4">
+                    <div className="max-w-2xl w-full">
+                        <div className="mb-6">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-white text-sm font-medium">
+                                    Pertanyaan {currentQuestion + 1} dari {questions.length}
+                                </span>
+                                <span className="text-white text-sm font-medium">
+                                    {Math.round(progress)}%
+                                </span>
+                            </div>
+                            <div className="w-full bg-white bg-opacity-30 rounded-full h-3">
+                                <div
+                                    className="bg-white h-3 rounded-full transition-all duration-300"
+                                    style={{ width: `${progress}%` }}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-3xl shadow-2xl p-8">
+                            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                                {questions[currentQuestion].question}
+                            </h2>
+                            
+                            <div className="space-y-3">
+                                {questions[currentQuestion].options.map((option, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => handleAnswer(index)}
+                                        className="w-full text-left p-5 rounded-xl border-2 border-gray-200 hover:border-purple-500 hover:bg-purple-50 transition-all transform hover:scale-102 active:scale-98"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white flex items-center justify-center font-semibold flex-shrink-0">
+                                                {String.fromCharCode(65 + index)}
+                                            </div>
+                                            <span className="text-gray-700 font-medium">{option.text}</span>
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<PersonalityTest />);
+    </script>
+</body>
+</html>
